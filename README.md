@@ -1,5 +1,7 @@
 # Common Hours
 
+[Open the free app](https://skailiner-common-hours.static.hf.space/index.html) · [GitHub](https://github.com/skailiner/common-hours) · [Hugging Face](https://huggingface.co/spaces/skailiner/common-hours)
+
 A free, browser-local community rota planner. Match people to roles using declared skills, availability, workload limits and fixed assignments. A local integer-flow solver fills as many eligible positions as possible, then balances assignment counts, then favors preferred availability.
 
 This is a draft planning aid, not a staffing agreement, qualification check or safety assessment.

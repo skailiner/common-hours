@@ -28,7 +28,7 @@ A follow-up review verified exports and browser guards and identified an untouch
 
 ## Browser and publication checks
 
-Focused real-browser validation of all four intended browser tools and production delivery checks are recorded in RELEASE.md when completed. No broad visual, screenshot, mobile-device or assistive-technology testing has been claimed.
+Focused real-browser validation of all four intended browser tools and public production calculations passed. Anonymous HTML, entry scripts, stylesheet and worker matched the tested build. See RELEASE.md for exact fixtures and receipts. No broad visual, screenshot, mobile-device or assistive-technology testing has been claimed.
 
 The source uses labeled controls, bundled accessible primitives, keyboard focus outlines, reduced-motion rules and responsive layouts. These implementation choices do not replace a full accessibility audit.
 
