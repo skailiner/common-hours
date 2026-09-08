@@ -29,3 +29,9 @@ No real-time collaboration, persistent records, identity system, notifications, 
 ## Acceptance
 
 A visitor can enter a complete roster, create a feasible draft, inspect eligibility and unmet positions, preserve locks, export reusable files, and understand what the result does and does not certify. Mathematical and workflow tests must pass before public publication.
+
+## Consumer revision - 9 September 2026
+
+The primary job is now stated in ordinary language: turn volunteer availability into a draft to discuss. First-use steps expose the existing setup path. A new verified review layer distinguishes full roles from partial staffing, reports people at their declared limit, and describes observed obstacles for each gap without claiming a unique cause or recommending unsafe changes.
+
+The downloadable plain-text team brief contains the rota, unfilled positions, workloads, fixed-assignment labels and a discussion checklist. It is deliberately separate from the editable roster backup. It warns that calendar dates, time zones, consent and operational safety are not established by the draft. All explanation is deterministic; no AI API or new data storage is introduced.

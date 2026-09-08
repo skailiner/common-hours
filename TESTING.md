@@ -33,3 +33,6 @@ Focused real-browser validation of all four intended browser tools and public pr
 The source uses labeled controls, bundled accessible primitives, keyboard focus outlines, reduced-motion rules and responsive layouts. These implementation choices do not replace a full accessibility audit.
 
 The lint command is scoped to authored files. Bundled unused UI and hook code is preserved. Dependency fixes were applied with the retained lockfile, without running a dependency audit; no audit-clean claim is made.
+# Consumer revision checks - 9 September 2026
+
+Seven additional automated groups cover duplicate-name disambiguation and zero limits, the verified review summary, eligibility-versus-competition descriptions, partial/empty/zero-demand roles, 64 generated bucket-partition checks, exact plain-text export and rejection of altered or stale results. All 25 groups passed along with type and authored-file lint checks. Independent review also exercised 384 generated roster/lock cases and identified the two now-corrected labeling edge cases. Existing numerical and workflow tests remain in place. These source/automated checks do not constitute user research, phone-device testing or a screen-reader audit.

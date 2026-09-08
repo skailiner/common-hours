@@ -1,5 +1,7 @@
 {
   "d1": null,
   "r2": null,
-  "static": { "directory": "dist/client" }
+  "static": {
+    "directory": "dist/client"
+  }
 }

@@ -1,8 +1,16 @@
 # Common Hours
 
+New here? Read the [plain-language user guide](CONSUMER.md) for a first useful result, examples and important limits.
+
 [Open the free app](https://skailiner-common-hours.static.hf.space/index.html) · [GitHub](https://github.com/skailiner/common-hours) · [Hugging Face](https://huggingface.co/spaces/skailiner/common-hours)
 
-A free, browser-local community rota planner. Match people to roles using declared skills, availability, workload limits and fixed assignments. A local integer-flow solver fills as many eligible positions as possible, then balances assignment counts, then favors preferred availability.
+## Put the right people in the right hours
+
+Turn volunteer availability and skills into a draft rota you can discuss with your team. Common Hours is for small, single-day events: a repair cafe, community workshop or volunteer session with clear roles and equal time blocks. Enter your people and requirements, see which positions can be filled, and review the remaining gaps before making promises.
+
+The draft review translates the calculation into fully staffed roles, people at their stated limit and assignments that are available but not preferred. Gap cards distinguish missing eligibility from competing roles or limits. A downloadable team brief contains the rota, unresolved coverage, individual workloads and a discussion checklist; JSON remains the editable backup.
+
+The local integer-flow solver fills as many eligible positions as possible, then balances assignment counts, then favors preferred availability. The mathematical certificate is available for inspection, but you do not need to understand network flow to use the planner.
 
 This is a draft planning aid, not a staffing agreement, qualification check or safety assessment.
 
@@ -14,15 +22,15 @@ This is a draft planning aid, not a staffing agreement, qualification check or s
 4. Add roles, headcounts and required skills. Every assigned person must have every checked skill.
 5. Create a draft plan. Inspect eligibility, workload and any gaps.
 6. Lock agreed assignments if needed, then replan. Locks stay fixed and must satisfy all hard constraints.
-7. Download the roster JSON before leaving. CSV lists every needed position, including gaps; the certificate JSON includes the roster and a checkable result.
+7. Download the team brief to discuss the draft. It contains names and does not record a calendar date or time zone; add that context when sharing. Download the roster JSON before leaving so you can reopen and edit it. CSV lists every needed position, including gaps; the certificate JSON includes the roster and a checkable result.
 
 Nothing is autosaved. Refreshing or closing the page loses changes. The application does not send roster data to a server or call an AI API. The hosting provider still receives ordinary page requests. Share exported personal information only with permission.
 
 ## Scope
 
-- Up to32 people,12 time blocks,48 roles,16 skill labels and128 total positions.
-- Equal blocks of15–240 minutes, nonoverlapping within one local day.
-- At most one role per person per block; person limits0–12 assignments.
+- Up to 32 people, 12 time blocks, 48 roles, 16 skill labels and 128 total positions.
+- Equal blocks of 15–240 minutes, nonoverlapping within one local day.
+- At most one role per person per block; person limits 0–12 assignments.
 - Availability is unavailable, available or preferred.
 - A maximum-coverage plan may contain partly staffed roles that are not operational.
 - No overnight work, breaks, fatigue, travel, time zones, supervision ratios or legal compliance model.

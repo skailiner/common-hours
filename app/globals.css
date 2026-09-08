@@ -593,6 +593,161 @@ footer {
   overflow-wrap: anywhere;
   font-size: clamp(1.8rem, 3vw, 2.6rem);
 }
+.planning-steps {
+  margin: 0 40px 20px;
+  padding: 16px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  align-items: center;
+  border-block: 1px solid #c8ceca;
+}
+.planning-steps a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-underline-offset: 4px;
+}
+.planning-steps a span {
+  background: #006847;
+  color: #fff;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+}
+.planning-steps p {
+  width: 100%;
+  font-size: 0.875rem;
+  color: #59605c;
+}
+.plan-review {
+  margin: 0 40px 28px;
+  padding: 24px;
+  background: #fff;
+  border: 1px solid #b2c7ba;
+  border-top: 5px solid #006847;
+  border-radius: 5px;
+  scroll-margin-top: 20px;
+}
+.review-heading {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+}
+.review-heading h2 {
+  font-size: clamp(1.35rem, 2vw, 1.85rem);
+  line-height: 1.3;
+  font-weight: 700;
+  margin-top: 8px;
+  max-width: 750px;
+}
+.review-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 22px 0 14px;
+}
+.review-metrics p {
+  border-left: 3px solid #c8ceca;
+  padding-left: 14px;
+  font-size: 0.875rem;
+  color: #59605c;
+}
+.review-metrics strong {
+  display: block;
+  color: #064d35;
+  font-size: 1.75rem;
+  line-height: 1.3;
+}
+.review-explainer {
+  font-size: 1rem;
+  max-width: 1000px;
+}
+.review-checklist {
+  padding-left: 22px;
+  margin: 18px 0;
+  font-size: 1rem;
+}
+.review-checklist li {
+  padding: 4px 0 4px 6px;
+}
+.gap-list {
+  margin: 22px 0;
+}
+.gap-list h3 {
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+.gap-card {
+  margin-top: 14px;
+  padding: 18px;
+  background: #fffaf0;
+  border: 1px solid #c9a656;
+  border-radius: 4px;
+  display: grid;
+  gap: 12px;
+  font-size: 1rem;
+}
+.gap-card h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+.gap-card summary {
+  cursor: pointer;
+  min-height: 44px;
+  display: list-item;
+  font-weight: 700;
+}
+.gap-card details p {
+  margin: 12px 0;
+}
+.gap-card button {
+  justify-self: start;
+  white-space: normal;
+  height: auto;
+}
+@media (max-width: 1150px) {
+  .planning-steps,
+  .plan-review {
+    margin-inline: 24px;
+  }
+}
+@media (max-width: 600px) {
+  .planning-steps,
+  .plan-review {
+    margin-inline: 18px;
+  }
+  .planning-steps {
+    gap: 8px;
+  }
+  .planning-steps a {
+    width: 100%;
+  }
+  .plan-review {
+    padding: 18px;
+  }
+  .review-metrics {
+    grid-template-columns: 1fr;
+  }
+  .review-metrics p {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .review-heading button {
+    width: 100%;
+    white-space: normal;
+    height: auto;
+  }
+}
 .toolbar {
   display: flex;
   flex-wrap: wrap;

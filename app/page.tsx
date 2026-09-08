@@ -1,5 +1,11 @@
 'use client';
-import { useState, useEffect, useSyncExternalStore, useRef } from 'react';
+import {
+  useState,
+  useEffect,
+  useSyncExternalStore,
+  useRef,
+  useMemo,
+} from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -31,6 +37,7 @@ import {
 } from '@/lib/roster';
 import { registerTools } from '@/lib/browser-tools';
 import { download, rosterJSON, reportJSON, scheduleCSV } from '@/lib/files';
+import { personLabel, reviewPlan, teamBrief } from '@/lib/brief';
 // Vite supplies the default worker constructor for this query import.
 // eslint-disable-next-line import/default
 import PlannerWorker from '@/lib/planner.worker.ts?worker';
@@ -56,6 +63,10 @@ export default function CommonHours() {
     locked = new Set(r.locks.map(assignmentKey)),
     assigned = result?.assignments ?? r.locks,
     blocked = !!s.busy || !!s.draft || !!s.pending;
+  const review = useMemo(
+    () => (result ? reviewPlan(r, result) : null),
+    [r, result],
+  );
   const attempt = (fn: () => void) => {
     try {
       fn();
@@ -71,6 +82,15 @@ export default function CommonHours() {
     }
   };
   const label = (id: string) => r.skills.find((k) => k.id === id)!.label;
+  const inspectRole = (id: string) =>
+    attempt(() => {
+      w.inspect(id);
+      requestAnimationFrame(() => {
+        const panel = document.getElementById('eligibility-details');
+        panel?.focus({ preventScroll: true });
+        panel?.scrollIntoView({ block: 'start' });
+      });
+    });
   const load = (id: string) => assigned.filter((a) => a.personId === id).length;
   const selected = r.shifts.find((v) => v.id === s.selectedShift);
   const required = r.shifts.reduce((n, v) => n + v.needed, 0);
@@ -86,15 +106,15 @@ export default function CommonHours() {
           <i aria-hidden="true">↗</i>
         </a>
         <p>
-          COMMUNITY ROTA
+          VOLUNTEER EVENT PLANNER
           <br />
-          WORLD BUILD 013
+          FREE · NO ACCOUNT
         </p>
         <span className="local-mark">TEMPORARY · BROWSER-LOCAL</span>
       </header>
       <section className="project-heading">
         <div>
-          <p className="eyebrow">PEOPLE + AVAILABILITY + SKILLS</p>
+          <p className="eyebrow">PUT THE RIGHT PEOPLE IN THE RIGHT HOURS</p>
           <h1>{r.title}</h1>
           <Button
             variant="ghost"
@@ -106,42 +126,57 @@ export default function CommonHours() {
         </div>
         <div className="project-action">
           <p>
-            Fill eligible positions, balance assignment counts, then favor
-            preferred hours. Review the draft with your team.
+            Turn your team’s skills and availability into a draft rota. See the
+            gaps, check the workload and take a clear plan to your team.
           </p>
           <Button onClick={start} disabled={blocked}>
             Create draft plan <ArrowRight />
           </Button>
         </div>
       </section>
+      <nav className="planning-steps" aria-label="Plan your event">
+        <a href="#rota">
+          <span>1</span> Set times and roles
+        </a>
+        <a href="#team">
+          <span>2</span> Add your people
+        </a>
+        <a href={result ? '#plan-review' : '#rota'}>
+          <span>3</span> Create, review and share
+        </a>
+        <p>
+          Trying it out? The repair café is a fictional example. Your edits are
+          not autosaved.
+        </p>
+      </nav>
       <div className="toolbar">
         <Button
           variant="outline"
           disabled={blocked}
           onClick={() => attempt(() => w.requestReplace(blank()))}
         >
-          New blank roster
+          Start my event
         </Button>
         <Button
           variant="outline"
           disabled={blocked}
           onClick={() => attempt(() => w.requestReplace(example()))}
         >
-          Load repair café
+          Try the example
         </Button>
         <Button
           variant="outline"
           disabled={blocked}
           onClick={() => file.current?.click()}
         >
-          Import roster
+          Open a saved roster
         </Button>
         <Button
           variant="outline"
           disabled={blocked}
           onClick={() => attempt(() => w.begin('json'))}
         >
-          Edit JSON
+          Advanced: edit JSON
         </Button>
         <Button
           variant="outline"
@@ -156,7 +191,7 @@ export default function CommonHours() {
             )
           }
         >
-          <Download size={16} /> Roster backup
+          <Download size={16} /> Save roster file
         </Button>
         <Input
           ref={file}
@@ -213,6 +248,111 @@ export default function CommonHours() {
             : 'One person can cover only one role in each block. No plan has been calculated for this revision.'}
         </p>
       </div>
+      {result && review && (
+        <section
+          className="plan-review"
+          id="plan-review"
+          aria-labelledby="review-title"
+        >
+          <div className="review-heading">
+            <div>
+              <p className="eyebrow">YOUR DRAFT / NOT YET CONFIRMED</p>
+              <h2 id="review-title">{review.headline}</h2>
+            </div>
+            <Button
+              disabled={blocked}
+              onClick={() =>
+                attempt(() =>
+                  download(
+                    'common-hours-team-brief.txt',
+                    teamBrief(r, result),
+                    'text/plain;charset=utf-8',
+                  ),
+                )
+              }
+            >
+              <Download size={16} /> Download team brief
+            </Button>
+          </div>
+          <div className="review-metrics">
+            <p>
+              <strong>
+                {review.fullyStaffed} / {r.shifts.length}
+              </strong>{' '}
+              roles fully staffed
+            </p>
+            <p>
+              <strong>{review.atLimit}</strong> people at their stated limit
+            </p>
+            <p>
+              <strong>{result.preferencePenalty}</strong> assignments outside
+              preferred hours
+            </p>
+          </div>
+          <p className="review-explainer">
+            “Outside preferred” still means marked available. A full rota is a
+            proposal, not proof of consent or safe staffing.{' '}
+            {review.partlyStaffed > 0 &&
+              `${review.partlyStaffed} partly staffed roles need particular attention.`}
+          </p>
+          {review.gaps.length > 0 && (
+            <div className="gap-list">
+              <h3>Where the team needs a decision</h3>
+              {review.gaps.map((gap) => (
+                <article key={gap.shiftId} className="gap-card">
+                  <div>
+                    <h4>
+                      {gap.start} · {gap.role}
+                    </h4>
+                    <p>
+                      {gap.block} · {gap.missing} unfilled
+                    </p>
+                  </div>
+                  <p>{gap.nextStep}</p>
+                  <details>
+                    <summary>What this draft shows</summary>
+                    <p>
+                      {gap.eligiblePeople} people have the declared skills and
+                      availability. Among people not assigned to this role:{' '}
+                      {gap.unavailable} are unavailable; {gap.missingSkills} are
+                      available but lack a required skill; {gap.atLimit}{' '}
+                      eligible people are at their limit; {gap.occupied} other
+                      eligible people are assigned elsewhere in this block.
+                    </p>
+                    <p>
+                      Each person appears in the first matching group above.
+                      These are observations of this draft, not a unique
+                      explanation or a guarantee that changing one rule will
+                      help.
+                    </p>
+                  </details>
+                  <Button
+                    variant="outline"
+                    disabled={blocked}
+                    onClick={() => inspectRole(gap.shiftId)}
+                  >
+                    Inspect people for this role
+                  </Button>
+                </article>
+              ))}
+            </div>
+          )}
+          <ol className="review-checklist">
+            <li>Confirm each person’s hours, skills and willingness.</li>
+            <li>
+              Check full role headcounts, breaks and supervision separately.
+            </li>
+            <li>
+              Make agreed edits, create a fresh draft and save a roster file.
+            </li>
+          </ol>
+          <p className="hint">
+            The team brief is a readable text file with the rota, gaps,
+            workloads and discussion checklist. It includes names; share only
+            with permission. It is not an editable backup.
+          </p>
+        </section>
+      )}
       <section className="workspace" id="rota">
         <div className="rota-board">
           <div className="board-title">
@@ -315,7 +455,9 @@ export default function CommonHours() {
                                           <span className="person-dot">
                                             {person.name.slice(0, 1)}
                                           </span>
-                                          <strong>{person.name}</strong>
+                                          <strong>
+                                            {personLabel(r, person.id)}
+                                          </strong>
                                           <Button
                                             size="icon"
                                             variant="ghost"
@@ -324,7 +466,7 @@ export default function CommonHours() {
                                               (locked.has(assignmentKey(a))
                                                 ? 'Unlock '
                                                 : 'Lock ') +
-                                              person.name +
+                                              personLabel(r, person.id) +
                                               ' at ' +
                                               shift.label +
                                               ' in ' +
@@ -368,9 +510,7 @@ export default function CommonHours() {
                               <Button
                                 variant="outline"
                                 disabled={blocked}
-                                onClick={() =>
-                                  attempt(() => w.inspect(shift.id))
-                                }
+                                onClick={() => inspectRole(shift.id)}
                               >
                                 Inspect eligibility
                               </Button>
@@ -421,7 +561,7 @@ export default function CommonHours() {
               ))}
           </div>
         </div>
-        <aside className="team-panel">
+        <aside className="team-panel" id="team">
           <div className="board-title">
             <h2>The team</h2>
             <Button
@@ -439,7 +579,7 @@ export default function CommonHours() {
                   {p.name.slice(0, 2).toUpperCase()}
                 </span>
                 <div>
-                  <h3>{p.name}</h3>
+                  <h3>{personLabel(r, p.id)}</h3>
                   <p>
                     {p.skills.length
                       ? p.skills.map(label).join(' + ')
@@ -487,7 +627,12 @@ export default function CommonHours() {
         </aside>
       </section>
       {selected && (
-        <section className="detail-panel" aria-labelledby="eligibility-title">
+        <section
+          className="detail-panel"
+          id="eligibility-details"
+          tabIndex={-1}
+          aria-labelledby="eligibility-title"
+        >
           <div className="board-title">
             <h2 id="eligibility-title">{selected.label} · eligibility</h2>
             <span>
@@ -523,7 +668,7 @@ export default function CommonHours() {
                 );
                 return (
                   <TableRow key={p.id}>
-                    <TableCell>{p.name}</TableCell>
+                    <TableCell>{personLabel(r, p.id)}</TableCell>
                     <TableCell>
                       {status(p, selected.blockId) === 'no'
                         ? 'Unavailable'
@@ -594,7 +739,7 @@ export default function CommonHours() {
       {result && (
         <section className="detail-panel result-panel">
           <div className="board-title">
-            <h2>Why this draft is optimal</h2>
+            <h2>The reasoning behind this draft</h2>
             <span>REVISION {s.revision}</span>
           </div>
           <p>
