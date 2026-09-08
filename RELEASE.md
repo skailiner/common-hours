@@ -1,5 +1,25 @@
 # Common Hours release
 
+## Consumer revision - verified 9 September 2026
+
+The first consumer-focused revision is live at the existing free public app. It adds a clearer setup path, a verified draft-review panel, role-level gap observations, workload summaries and a downloadable plain-text team brief. Names include stable identifiers so distinct people remain distinguishable even when their names collide. The planner, file format and privacy boundary remain unchanged; this is not a new app or a paid AI layer.
+
+- GitHub functional release: c2d7ef4b95b4f2c549a69f51d4f71dd5e05db808
+- Hugging Face functional app/source release: 3a98e9ab4a7b8434d445a5989a7e85da14d07c81
+- Both branch heads verified; the Space API reported RUNNING at the new release.
+- All 25 automated test groups passed, including the original mathematical/workflow checks and seven consumer-summary/export groups. Type checks, authored-file lint and both private/public production builds passed.
+- Independent source review and 384 generated roster/lock cases completed. Duplicate-name and zero-limit edge cases found during review were corrected with regression tests before publication.
+- Nineteen public assets matched the tested build when staged. Anonymous public HTML matched after removing only the provider's known 101-byte creator-metadata script. Twelve public JavaScript/style/icon assets, including the worker, matched byte for byte.
+- Normalized HTML SHA256: da394610ae4ffaab68b8178dc2173420177f1d052d2b80427c3831ba6f33bf00
+- Stylesheet SHA256: 809ff41191887e651111e986014f475083dbe471789db91077c293b02a7af411
+- Planner worker SHA256: 476795d5ed8c3232bc2caacbcb3a3763a9df7c8bd28ee10b930d8073c1864d4e
+
+The separate owner-private Sites revision also deployed successfully. No access policy changed. This revision received source, automated and delivery checks, not new browser-interaction, phone-device or screen-reader testing. Historical hashed assets were retained for cached clients. Later receipt-only commits do not change the tested application.
+
+Remaining consumer work includes bulk team entry, opt-in local recovery and a retained comparison baseline during replanning. The broader portfolio overhaul is not complete.
+
+## Original release
+
 Verified 2026-09-08.
 
 ## Public deliverables
@@ -44,4 +64,3 @@ The free public Space uses Static hosting. No new paid service or social account
 The unused Hugging Face starter stylesheet was removed. It remains recoverable in the Space's initial Git history. Existing large-file rules were preserved.
 
 No broad visual, phone-device, screen-reader or dependency-security audit is claimed. A plan certifies only the declared model and objective, not safe staffing, consent, qualifications or legal compliance.
-
